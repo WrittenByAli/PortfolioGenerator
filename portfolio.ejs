@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title><%= data.name %> - Portfolio</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Theme Styles */
+    body.classic {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        color: #2d3748;
+    }
+    body.classic .section-title,
+    body.classic .name {
+        color: #2d3748;
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
+    body.classic .bio,
+    body.classic .about-content,
+    body.classic .project-description {
+        color: #4a5568;
+    }
+    body.classic .theme-badge {
+        color: #fff;
+        background: #2d3748;
+        border-color: #2d3748;
+    }
+
+    body.modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+    }
+    body.modern .section-title,
+    body.modern .name {
+        color: #fff;
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
+    body.modern .bio,
+    body.modern .about-content,
+    body.modern .project-description {
+        color: #e0e0e0;
+    }
+    body.modern .theme-badge {
+        color: #764ba2;
+        background: #fff;
+        border-color: #fff;
+    }
+
+    body.dark {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        color: #f7fafc;
+    }
+    body.dark .section-title,
+    body.dark .name {
+        color: #f7fafc;
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
+    body.dark .bio,
+    body.dark .about-content,
+    body.dark .project-description {
+        color: #b5b5b5;
+    }
+    body.dark .theme-badge {
+        color: #fff;
+        background: #232b3e;
+        border-color: #232b3e;
+    }
+
+    body.pastel {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        color: #4a5568;
+    }
+    body.pastel .section-title,
+    body.pastel .name {
+        color: #4a5568;
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
+    body.pastel .bio,
+    body.pastel .about-content,
+    body.pastel .project-description {
+        color: #7b5e57;
+    }
+    body.pastel .theme-badge {
+        color: #fff;
+        background: #fcb69f;
+        border-color: #fcb69f;
+    }
+
+    /* Navigation */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 24px rgba(102, 126, 234, 0.08);
+        border-image: linear-gradient(90deg, #667eea, #764ba2, #fcb69f) 1;
+        border-bottom-width: 3px;
+    }
+    .navbar-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 3rem;
+        padding: 0 2rem;
+    }
+    .navbar-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        font-size: 1.7rem;
+        font-weight: 900;
+        letter-spacing: 1.5px;
+        position: relative;
+        user-select: none;
+        color: #fff;
+        text-shadow: 0 2px 12px rgba(102,126,234,0.18), 0 1px 0 #fff;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .navbar-logo:hover {
+        transform: scale(1.06) rotate(-2deg);
+        box-shadow: 0 4px 24px 0 rgba(102,126,234,0.18);
+        text-shadow: 0 4px 24px #764ba2, 0 1px 0 #fff;
+    }
+    .navbar-logo-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #fcb69f 100%);
+        box-shadow: 0 2px 12px rgba(102,126,234,0.18);
+        font-size: 1.5rem;
+        color: #fff;
+        margin-right: 0.2rem;
+        filter: drop-shadow(0 2px 6px rgba(102,126,234,0.15));
+        animation: logoPulse 2.5s infinite;
+        transition: box-shadow 0.2s;
+    }
+    .navbar-logo:hover .navbar-logo-icon {
+        box-shadow: 0 6px 24px #764ba2;
+    }
+    @keyframes logoPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.12); }
+    }
+    .nav-links {
+        display: flex;
+        gap: 2.5rem;
+    }
+    .nav-link {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        background: none;
+    }
+    .nav-link::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 50%;
+        bottom: 10px;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #fcb69f);
+        border-radius: 2px;
+        transition: width 0.4s cubic-bezier(.4,0,.2,1), left 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-link:hover::after {
+        width: 80%;
+        left: 10%;
+    }
+    .nav-link:hover {
+        background: rgba(102, 126, 234, 0.08);
+        transform: translateY(-2px) scale(1.04);
+        color: #fcb69f;
+    }
+
+    /* Sections */
+    .section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6rem 2rem 2rem;
+        position: relative;
+    }
+
+    .section-container {
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Home Section */
+    .home-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 4rem 3rem;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: fadeInUp 1s ease-out;
+    }
+
+    body.dark .home-section {
+        background: rgba(15, 15, 35, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-image {
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 2rem;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .profile-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .name {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .bio {
+        font-size: 1.25rem;
+        color: #718096;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+    }
+
+    .skills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .skill-tag {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .skill-tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .theme-badge {
+        display: inline-block;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    /* Portfolio Section */
+    .portfolio-section {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    body.dark .portfolio-section {
+        background: rgba(15, 15, 35, 0.3);
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .project-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .project-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    body.dark .project-card {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    body.dark .project-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .project-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: inherit;
+    }
+
+    .project-description {
+        color: #718096;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .project-link {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        text-decoration: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .project-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    /* About Section */
+    .about-section {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    body.dark .about-section {
+        background: rgba(15, 15, 35, 0.3);
+    }
+
+    .about-content {
+        text-align: left;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #718096;
+        white-space: pre-line;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .nav-container {
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .section {
+            padding: 5rem 1rem 2rem;
+        }
+
+        .home-section,
+        .portfolio-section,
+        .about-section {
+            padding: 2rem;
+        }
+
+        .name {
+            font-size: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+</head>
+<body class="<%= data.theme %>">
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <span class="navbar-logo-icon">★</span> <span>PORTFOLIO</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#portfolio" class="nav-link">Portfolio</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="section">
+        <div class="section-container">
+            <div class="home-section">
+                <% if (data.imagePath) { %>
+                    <img class="profile-image" src="<%= data.imagePath %>" alt="<%= data.name %>">
+                <% } %>
+                <h1 class="name"><%= data.name %></h1>
+                <p class="bio"><%= data.bio %></p>
+                <div class="skills">
+                    <% data.skills.split(',').forEach(function(skill) { %>
+                        <span class="skill-tag"><%= skill.trim() %></span>
+                    <% }); %>
+                </div>
+                <div class="theme-badge">
+                    <%= data.theme.charAt(0).toUpperCase() + data.theme.slice(1) %> Theme
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="section">
+        <div class="section-container">
+            <div class="portfolio-section">
+                <h2 class="section-title">Portfolio</h2>
+                <div class="projects-grid">
+                    <% if (data.projects && data.projects.length > 0) { %>
+                        <% data.projects.forEach(function(project) { %>
+                            <div class="project-card">
+                                <h3 class="project-title"><%= project.title %></h3>
+                                <p class="project-description"><%= project.description %></p>
+                                <% if (project.link) { %>
+                                    <a href="<%= project.link %>" target="_blank" class="project-link">View Project</a>
+                                <% } %>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="project-card">
+                            <h3 class="project-title">No Projects Yet</h3>
+                            <p class="project-description">Projects will appear here once added.</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="section-container">
+            <div class="about-section">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content"><%= data.about %></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <span>Made with ❤️ by <strong><%= data.name %></strong> &middot; Powered by Portfolio Generator</span>
+        </div>
+    </footer>
+    <style>
+    .footer {
+        width: 100%;
+        padding: 2rem 0 1rem 0;
+        background: rgba(0,0,0,0.03);
+        text-align: center;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(0,0,0,0.07);
+    }
+    .footer-content {
+        color: inherit;
+        opacity: 0.85;
+    }
+    body.modern .footer {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-top: none;
+    }
+    body.dark .footer {
+        background: #1a1a2e;
+        color: #f7fafc;
+        border-top: none;
+    }
+    body.pastel .footer {
+        background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+        color: #7b5e57;
+        border-top: none;
+    }
+    body.classic .footer {
+        background: #f5f7fa;
+        color: #2d3748;
+        border-top: none;
+    }
+    </style>
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                if (document.body.classList.contains('dark')) {
+                    navbar.style.background = 'rgba(15, 15, 35, 0.98)';
+                }
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                if (document.body.classList.contains('dark')) {
+                    navbar.style.background = 'rgba(15, 15, 35, 0.95)';
+                }
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
